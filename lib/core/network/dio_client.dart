@@ -19,8 +19,15 @@ class AuthInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
 
-    // 🚨 NE PAS envoyer token sur auth endpoints
-    if (!options.path.contains("/auth/")) {
+    final publicPaths = [
+      "/auth/login/",
+      "/auth/register/",
+      "/auth/cooperatives/", // ✅ AJOUT IMPORTANT
+    ];
+
+    final isPublic = publicPaths.any((p) => options.path.contains(p));
+
+    if (!isPublic) {
       final token = await _storage.getToken();
 
       if (token != null && token.isNotEmpty) {
@@ -32,17 +39,18 @@ class AuthInterceptor extends Interceptor {
   }
 
   // @override
-  // void onRequest(
-  //     RequestOptions options,
-  //     RequestInterceptorHandler handler,
-  //     ) async {
-  //   final token = await _storage.getToken();
+  // void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
   //
-  //   if (token != null) {
-  //     options.headers["Authorization"] = "Bearer $token";
+  //   // 🚨 NE PAS envoyer token sur auth endpoints
+  //   if (!options.path.contains("/auth/")) {
+  //     final token = await _storage.getToken();
+  //
+  //     if (token != null && token.isNotEmpty) {
+  //       options.headers["Authorization"] = "Bearer $token";
+  //     }
   //   }
   //
-  //   return handler.next(options);
+  //   handler.next(options);
   // }
 }
 

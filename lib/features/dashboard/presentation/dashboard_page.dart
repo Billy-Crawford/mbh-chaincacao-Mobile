@@ -78,23 +78,23 @@ class DashboardPage extends ConsumerWidget {
                   () => Navigator.pushNamed(context, '/lots'),
             ),
 
-            const SizedBox(height: 12),
+            // const SizedBox(height: 12),
+            //
+            // _button(
+            //   "Mes parcelles",
+            //   Colors.blueGrey,
+            //       () {
+            //     // futur module parcelle
+            //   },
+            // ),
 
-            _button(
-              "Mes parcelles",
-              Colors.blueGrey,
-                  () {
-                // futur module parcelle
-              },
-            ),
-
-            const SizedBox(height: 12),
-
-            _button(
-              "Scanner certificat",
-              Colors.black,
-                  () => Navigator.pushNamed(context, '/qr'),
-            ),
+            // const SizedBox(height: 12),
+            //
+            // _button(
+            //   "Scanner certificat",
+            //   Colors.black,
+            //       () => Navigator.pushNamed(context, '/qr'),
+            // ),
           ],
         ),
       ),
@@ -138,3 +138,5 @@ class DashboardPage extends ConsumerWidget {
     );
   }
 }
+
+

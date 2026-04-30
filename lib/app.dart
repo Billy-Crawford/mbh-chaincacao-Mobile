@@ -10,6 +10,8 @@ import 'features/lots/presentation/pages/lot_detail_page.dart';
 import 'features/lots/presentation/pages/lots_page.dart';
 import 'features/qr/presentation/qr_result_page.dart';
 import 'features/qr/presentation/qr_scanner_page.dart';
+import 'features/transferts/presentation/pages/create_transfert_page.dart';
+import 'features/transferts/presentation/pages/send_lot_page.dart';
 
 class ChainCacaoApp extends StatelessWidget {
   const ChainCacaoApp({super.key});
@@ -32,6 +34,7 @@ class ChainCacaoApp extends StatelessWidget {
         '/create-lot': (context) => const CreateLotPage(),
         '/qr': (context) => const QrScannerPage(),
         '/qr-result': (context) => const QrResultPage(),
+        '/send-lot': (context) => const SendLotPage(),
       },
     );
   }

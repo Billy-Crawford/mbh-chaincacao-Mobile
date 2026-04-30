@@ -9,8 +9,13 @@ class ApiConfig {
 
   // Lots
   static const String lots = "/api/lots/";
+  static const String transferts = "/api/transferts/";
 
   // Certificats
-  static const String certificats = "/api/certificats/";
+  // static const String certificats = "/api/lots/scanner/";
+  static const String certificats = "/api/lots/{id}/verify/";
+
+  // liate cooperatives
+  static const String cooperatives = "/api/auth/cooperatives/";
 }
 
