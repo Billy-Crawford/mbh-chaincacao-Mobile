@@ -54,8 +54,10 @@ class _SendLotPageState extends ConsumerState<SendLotPage> {
                     border: OutlineInputBorder(),
                   ),
                   items: data.map<DropdownMenuItem<int>>((coop) {
+                    final id = int.parse(coop["id"].toString()); // ✅ FIX
+
                     return DropdownMenuItem<int>(
-                      value: coop["id"],
+                      value: id,
                       child: Text(coop["username"] ?? "Coop"),
                     );
                   }).toList(),
@@ -113,9 +115,10 @@ class _SendLotPageState extends ConsumerState<SendLotPage> {
 
                     try {
                       await ref.read(transfertProvider).envoyerLot(
-                        lotId: lot["id"],
+                        lotId: lot["id"].toString(), // ✅ FORCER STRING
                         destinataireId: selectedCoopId!,
-                        poidsVerifie: double.parse(poidsCtrl.text),
+                        poidsVerifie: double.tryParse(poidsCtrl.text) ?? 0,
+                        // poidsVerifie: double.parse(poidsCtrl.text),
                         notes: notesCtrl.text,
                       );
 
