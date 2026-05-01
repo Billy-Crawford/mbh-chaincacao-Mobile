@@ -38,19 +38,5 @@ class AuthInterceptor extends Interceptor {
     handler.next(options);
   }
 
-  // @override
-  // void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-  //
-  //   // 🚨 NE PAS envoyer token sur auth endpoints
-  //   if (!options.path.contains("/auth/")) {
-  //     final token = await _storage.getToken();
-  //
-  //     if (token != null && token.isNotEmpty) {
-  //       options.headers["Authorization"] = "Bearer $token";
-  //     }
-  //   }
-  //
-  //   handler.next(options);
-  // }
 }
 

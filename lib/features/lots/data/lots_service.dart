@@ -39,3 +39,4 @@ class LotsService {
     return response.data;
   }
 }
+

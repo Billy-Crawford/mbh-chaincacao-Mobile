@@ -7,7 +7,7 @@ class TransfertService {
   final Dio _dio = DioClient().dio;
 
   Future<void> envoyerLot({
-    required String lotId, // ✅ UUID = String
+    required String lotId, // ✅ UUID STRING
     required int destinataireId,
     required double poidsVerifie,
     required String notes,
@@ -16,7 +16,7 @@ class TransfertService {
       await _dio.post(
         ApiConfig.transferts,
         data: {
-          "lot": lotId, // ✅ envoyer string
+          "lot": lotId,
           "destinataire": destinataireId,
           "etape": "ferme_cooperative",
           "poids_verifie": poidsVerifie,
