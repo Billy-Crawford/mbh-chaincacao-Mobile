@@ -11,114 +11,196 @@ class DashboardPage extends ConsumerWidget {
     final state = ref.watch(dashboardProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F1E7),
+      backgroundColor: const Color(0xFFFBF9F4),
       appBar: AppBar(
-        title: const Text("Dashboard Agriculteur"),
-        backgroundColor: const Color(0xFF5C3A21),
+        elevation: 0,
+        centerTitle: false,
+        title: const Text(
+          "Tableau de bord",
+          style: TextStyle(color: Color(0xFF2E1E12), fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.transparent,
+        actions: [
+          IconButton(
+            onPressed: () {}, // Logique déconnexion éventuelle
+            icon: const Icon(Icons.logout_rounded, color: Color(0xFF5C3A21)),
+          ),
+        ],
       ),
       body: state.isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: Color(0xFF2F6B3F)))
           : RefreshIndicator(
-        onRefresh: () =>
-            ref.read(dashboardProvider.notifier).loadStats(),
+        onRefresh: () => ref.read(dashboardProvider.notifier).loadStats(),
+        color: const Color(0xFF2F6B3F),
         child: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           children: [
-            // 👤 HEADER USER
+            // --- HEADER USER ---
             Container(
-              padding: const EdgeInsets.all(16),
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: const Color(0xFF2F6B3F),
-                borderRadius: BorderRadius.circular(12),
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF2F6B3F), Color(0xFF1E4D2B)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF2F6B3F).withOpacity(0.3),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Bienvenue 👋",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Bonjour 👋",
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.notifications_none, color: Colors.white, size: 20),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 5),
-                  Text(
+                  const Text(
                     "Agriculteur",
                     style: TextStyle(
-                      color: Colors.white70,
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
             ),
 
-            const SizedBox(height: 20),
-
-            _card("Total lots", state.total, Colors.brown),
-            const SizedBox(height: 15),
-
-            _card("Lots validés", state.valides, Colors.green),
-            const SizedBox(height: 15),
-
-            _card("En attente", state.enAttente, Colors.orange),
-
             const SizedBox(height: 30),
 
-            _button(
-              "Créer un lot",
-              Colors.brown,
-                  () => Navigator.pushNamed(context, '/create-lot'),
+            // --- SECTION STATISTIQUES (GRID VIEW) ---
+            const Text(
+              "Aperçu de vos lots",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF2E1E12),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            Row(
+              children: [
+                Expanded(
+                  child: _statCard(
+                    "Total lots",
+                    state.total.toString(),
+                    Icons.inventory_2_rounded,
+                    const Color(0xFF5C3A21),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _statCard(
+                    "Validés",
+                    state.valides.toString(),
+                    Icons.check_circle_rounded,
+                    const Color(0xFF2F6B3F),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            _statCard(
+              "Lots en attente de validation",
+              state.enAttente.toString(),
+              Icons.pending_actions_rounded,
+              const Color(0xFFE67E22),
+              isFullWidth: true,
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 35),
 
-            _button(
-              "Voir mes lots",
+            // --- ACTIONS ---
+            const Text(
+              "Actions rapides",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF2E1E12),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            _actionButton(
+              context,
+              "Créer un nouveau lot",
+              "Enregistrer une nouvelle récolte",
+              Icons.add_box_rounded,
+              const Color(0xFF5C3A21),
+                  () => Navigator.pushNamed(context, '/create-lot'),
+            ),
+            const SizedBox(height: 12),
+            _actionButton(
+              context,
+              "Consulter mes lots",
+              "Historique et suivi des transferts",
+              Icons.list_alt_rounded,
               const Color(0xFF2F6B3F),
                   () => Navigator.pushNamed(context, '/lots'),
             ),
-
-            // const SizedBox(height: 12),
-            //
-            // _button(
-            //   "Mes parcelles",
-            //   Colors.blueGrey,
-            //       () {
-            //     // futur module parcelle
-            //   },
-            // ),
-
-            // const SizedBox(height: 12),
-            //
-            // _button(
-            //   "Scanner certificat",
-            //   Colors.black,
-            //       () => Navigator.pushNamed(context, '/qr'),
-            // ),
+            const SizedBox(height: 40),
           ],
         ),
       ),
     );
   }
 
-  Widget _card(String title, int value, Color color) {
+  // Widget de carte statistique moderne
+  Widget _statCard(String title, String value, IconData icon, Color color, {bool isFullWidth = false}) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withOpacity(0.1)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
+        crossAxisAlignment: isFullWidth ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: const TextStyle(color: Colors.white, fontSize: 16)),
-          const SizedBox(height: 10),
+          Icon(icon, color: color, size: 28),
+          const SizedBox(height: 12),
           Text(
-            value.toString(),
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 28,
+            value,
+            style: TextStyle(
+              fontSize: 26,
               fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -126,17 +208,47 @@ class DashboardPage extends ConsumerWidget {
     );
   }
 
-  Widget _button(String text, Color color, VoidCallback onTap) {
-    return SizedBox(
-      width: double.infinity,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: onTap,
-        style: ElevatedButton.styleFrom(backgroundColor: color),
-        child: Text(text),
+  // Widget de bouton d'action stylisé
+  Widget _actionButton(BuildContext context, String title, String subtitle, IconData icon, Color color, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(18),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.08),
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: Colors.white),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(fontSize: 12, color: color.withOpacity(0.7)),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios_rounded, color: color, size: 16),
+          ],
+        ),
       ),
     );
   }
 }
-
-
