@@ -41,10 +41,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+
   Future<void> register(
       String username,
       String telephone,
       String password,
+      String village,  // Ajouté
+      String region,   // Ajouté
       ) async {
     state = state.copyWith(isLoading: true, error: null);
 
@@ -53,6 +56,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         username: username,
         telephone: telephone,
         password: password,
+        village: village, // Transmis au service
+        region: region,   // Transmis au service
       );
 
       state = state.copyWith(isLoading: false);
@@ -63,6 +68,29 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
     }
   }
+
+  // Future<void> register(
+  //     String username,
+  //     String telephone,
+  //     String password,
+  //     ) async {
+  //   state = state.copyWith(isLoading: true, error: null);
+  //
+  //   try {
+  //     await _service.register(
+  //       username: username,
+  //       telephone: telephone,
+  //       password: password,
+  //     );
+  //
+  //     state = state.copyWith(isLoading: false);
+  //   } catch (e) {
+  //     state = state.copyWith(
+  //       isLoading: false,
+  //       error: e.toString(),
+  //     );
+  //   }
+  // }
 
   Future<void> checkAuth() async {
     final token = await _storage.getToken();

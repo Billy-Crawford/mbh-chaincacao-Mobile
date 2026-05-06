@@ -10,6 +10,8 @@ class AuthService {
     required String username,
     required String telephone,
     required String password,
+    required String village,
+    required String region,
   }) async {
     try {
       await _dio.post(
@@ -20,8 +22,8 @@ class AuthService {
           "password": password,
           "role": "agriculteur",
           "telephone": telephone,
-          "village": "Non défini",
-          "region": "Non défini",
+          "village": village,
+          "region": region,
         },
       );
     } on DioException catch (e) {

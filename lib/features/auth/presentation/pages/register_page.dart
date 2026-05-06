@@ -14,12 +14,16 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final pinController = TextEditingController();
+  final villageController = TextEditingController();
+  final regionController = TextEditingController();
 
   void register() async {
     await ref.read(authProvider.notifier).register(
       nameController.text,
       phoneController.text,
       pinController.text,
+      villageController.text,
+      regionController.text,
     );
 
     final state = ref.read(authProvider);
@@ -86,7 +90,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
               const SizedBox(height: 40),
 
-              // Champ Nom Complet
               _buildInputField(
                 controller: nameController,
                 label: "Nom complet",
@@ -95,7 +98,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
               const SizedBox(height: 16),
 
-              // Champ Téléphone
               _buildInputField(
                 controller: phoneController,
                 label: "Numéro de téléphone",
@@ -105,7 +107,22 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
               const SizedBox(height: 16),
 
-              // Champ Code PIN / Mot de passe
+              _buildInputField(
+                controller: villageController,
+                label: "Village",
+                icon: Icons.location_on_outlined,
+              ),
+
+              const SizedBox(height: 16),
+
+              _buildInputField(
+                controller: regionController,
+                label: "Région",
+                icon: Icons.map_outlined,
+              ),
+
+              const SizedBox(height: 16),
+
               _buildInputField(
                 controller: pinController,
                 label: "Code PIN / Mot de passe",
@@ -115,9 +132,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
               const SizedBox(height: 40),
 
-              // Bouton d'inscription
               state.isLoading
-                  ? const Center(child: CircularProgressIndicator(color: Color(0xFF2F6B3F)))
+                  ? const Center(
+                child: CircularProgressIndicator(color: Color(0xFF2F6B3F)),
+              )
                   : ElevatedButton(
                 onPressed: register,
                 style: ElevatedButton.styleFrom(
@@ -160,6 +178,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                 ),
               ),
+
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -167,7 +187,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     );
   }
 
-  // Widget Helper pour maintenir la cohérence visuelle
   Widget _buildInputField({
     required TextEditingController controller,
     required String label,
@@ -212,3 +231,5 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     );
   }
 }
+
+
